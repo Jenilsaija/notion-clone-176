@@ -36,7 +36,7 @@ export default function RegisterPage() {
           // message: "You have been successfully registered",
           type: "success"
         })
-        Router.push("/")
+        Router.push("/login")
       } else {
         toast({
           title: res.data.message,

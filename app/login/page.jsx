@@ -21,13 +21,9 @@ export default function LoginPage() {
       "action": "LOGIN",
       ...credentials
     }
-    axios.post("https://" + window.location.host + "/api/auth.php", objReq).then((res) => {
+    axios.post("/api/auth", objReq).then((res) => {
       if (res.data.status) {
         setCookie("userToken", btoa(res.data.userToken),1);
-        toast({
-          title: res.data.message,
-          type: "success"
-        })
         Router.push("/")
       } else {
         toast({

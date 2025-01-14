@@ -39,7 +39,7 @@ const Menu = () => {
                 "searchby":"ALL",
             }
         }
-        axios.post("https://" + window.location.host + "/api/application.php", objReq, {
+        axios.post("/api/application", objReq, {
             headers: {
                 'Content-Type': 'application/json',
                 "Auth-Token": atob(getCookie('userToken'))
@@ -50,7 +50,7 @@ const Menu = () => {
                     return {
                         title: item.title,
                         icon: <File />,
-                        href: "/app/pages/edit?ref=" + btoa(JSON.stringify({recid:item.recid}))
+                        href: "/app/pages/edit/" + btoa(JSON.stringify({recid:item.recid}))
                     }
                 }))
             } else {
@@ -66,7 +66,7 @@ const Menu = () => {
         const objReq = {
             "action": "NOTES.CREATE",
         }
-        axios.post("https://" + window.location.host + "/api/application.php", objReq, {
+        axios.post("/api/application", objReq, {
             headers: {
                 'Content-Type': 'application/json',
                 "Auth-Token": atob(getCookie("userToken"))
