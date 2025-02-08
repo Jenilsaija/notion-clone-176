@@ -28,7 +28,7 @@ export default function RegisterPage() {
       "action": "MAKE",
       ...credentials
     }
-    axios.post("./api/auth", objreq).then((res) => {
+    axios.post("/api/auth", objreq).then((res) => {
       if (res.data.status) {
         setCookie("userToken", btoa(res.data.userToken),1);
         toast({
