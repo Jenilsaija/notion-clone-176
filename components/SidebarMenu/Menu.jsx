@@ -39,7 +39,7 @@ const Menu = () => {
                 "searchby":"ALL",
             }
         }
-        axios.post("/api/application", objReq, {
+        axios.post("./api/application", objReq, {
             headers: {
                 'Content-Type': 'application/json',
                 "Auth-Token": atob(getCookie('userToken'))
@@ -66,7 +66,7 @@ const Menu = () => {
         const objReq = {
             "action": "NOTES.CREATE",
         }
-        axios.post("/api/application", objReq, {
+        axios.post("./api/application", objReq, {
             headers: {
                 'Content-Type': 'application/json',
                 "Auth-Token": atob(getCookie("userToken"))
