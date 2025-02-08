@@ -33,7 +33,7 @@ const page = ({ params }) => {
           "search": ref1?.recid
         }
       }
-      axios.post("./api/application", objReq, {
+      axios.post("/api/application", objReq, {
         headers: {
           'Content-Type': 'application/json',
           "Auth-Token": atob(getCookie("userToken"))
@@ -56,7 +56,7 @@ const page = ({ params }) => {
           notedata: JSON.stringify(savedData)
         }
       }
-      const res = await axios.post("./api/application", objReq, {
+      const res = await axios.post("/api/application", objReq, {
         headers: {
           'Content-Type': 'application/json',
           "Auth-Token": atob(getCookie("userToken"))
