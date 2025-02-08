@@ -21,7 +21,7 @@ export default function LoginPage() {
       "action": "LOGIN",
       ...credentials
     }
-    axios.post("/api/auth", objReq).then((res) => {
+    axios.post("./api/auth", objReq).then((res) => {
       if (res.data.status) {
         setCookie("userToken", btoa(res.data.userToken),1);
         Router.push("/")
