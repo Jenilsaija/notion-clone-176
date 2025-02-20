@@ -40,7 +40,11 @@ const page = ({ params }) => {
           "Auth-Token": atob(getCookie("userToken"))
         }
       }).then((res) => {
-        setNote(res.data.data[0]);
+        const notedata=res.data.data[0];
+        if(notedata?.notedata===null){
+          notedata.notedata="{}";
+        }
+        setNote(notedata);
       })
     }
   }
@@ -84,8 +88,7 @@ const page = ({ params }) => {
   useEffect(()=>{
     geteditor();
   },[note])
-  console.log(note);
-  
+
   const geteditor = () => {
     if (editorstate !== null) return; // Skip initialization if the editor already
     if (note?.notedata !== undefined && note?.notedata !== null) {
@@ -150,7 +153,7 @@ const page = ({ params }) => {
         data: JSON.parse(note?.notedata),
         // readOnly: readOnly,
       });
-      setEditorstate(editorInstance)
+      setEditorstate(editorInstance);
   }
   }
 
