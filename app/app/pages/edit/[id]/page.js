@@ -49,15 +49,14 @@ const page = ({ params }) => {
     }
   }
 
-  const updateNote = async (heading, savedData) => {
+  const updateNote = async ( savedData) => {
     let ref1 = atob(ref);
     ref1 = JSON.parse(ref1);
-    if (window !== undefined) {
       const objReq = {
         action: "NOTES.UPDATE",
-        sanitizer: { notes_id: ref?.recid },
+        sanitizer: { notes_id: ref1?.recid },
         update: {
-          title: heading,
+          title: note?.title,
           notedata: JSON.stringify(savedData)
         }
       }
@@ -78,7 +77,6 @@ const page = ({ params }) => {
           type: "error"
         })
       }
-    }
   }
 
   useEffect(() => {
@@ -160,9 +158,10 @@ const page = ({ params }) => {
   const handlesave = async () => {
     if (editorstate) {
       const savedData = await editorstate.save();
-      updateNote(heading, savedData);
+      updateNote(savedData);
     }
   };
+  
   useEffect(()=>{
     setTitle(note.title);
   },[note])
@@ -171,7 +170,7 @@ const page = ({ params }) => {
     <div>
       <h1 className='mx-24 text-5xl my-10'> <Input placeholder="Please Enter Note Title" value={note.title} onChange={(e) => { setNote({ ...note, title: e.target.value }) }} /> </h1>
       <div id="editorcustom" ></div>
-      <Button onClick={()=>{handlesave}} className='mx-24 flex justify-end'> save</Button>
+      <Button onClick={handlesave} className='mx-24 flex justify-end'> save</Button>
     </div>
   )
 }

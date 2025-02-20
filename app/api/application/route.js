@@ -1,6 +1,6 @@
 import db from "@/lib/db.lib";
 import { NextResponse } from "next/server";
-import { AddNote, fetchAllNotes } from "./Notes/NoteFunctions";
+import { AddNote, fetchAllNotes, UpdateNote } from "./Notes/NoteFunctions";
 import { validateToken } from "./validation";
 
 export async function POST(req) {
@@ -35,6 +35,9 @@ export async function POST(req) {
             arrResponse = await AddNote();
         break;
     
+        case "NOTES.UPDATE":
+            arrResponse = await UpdateNote(requestbody);
+            break;
         default:
             arrResponse.message="Invalid action";
             break;

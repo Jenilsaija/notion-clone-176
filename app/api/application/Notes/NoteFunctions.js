@@ -60,3 +60,25 @@ export const AddNote =async ()=>{
     }
     return arrResponse;
 }
+
+export const UpdateNote =async (requestbody)=>{
+    let arrResponse={
+        status:false,
+        message:"Invalid Api Response"
+    }
+    const recid = requestbody['sanitizer']['notes_id'];
+    const updateparams = requestbody['update'];
+    const res = await db.query("UPDATE notes SET title=?,notedata=?,modifiedat=NOW() WHERE recid='"+recid+"'",[updateparams['title'],updateparams['notedata']]);
+    if (res[0].affectedRows>0) {
+        arrResponse = {
+            status:true,
+            message:"Note Updated Successfully"
+        }
+    }else{
+        arrResponse = {
+            status:false,
+            message:"Something went wrong"
+        }
+    }
+    return arrResponse;
+}
