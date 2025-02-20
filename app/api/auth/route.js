@@ -36,6 +36,20 @@ export async function POST(req) {
             }
             break;
 
+        case "VALIDATE":
+            try {
+                jwt.verify(requesdata.token, seckey);
+                arrRepsponse = {
+                    status: true
+                }
+            } catch (error) {
+                if (jwt.JsonWebTokenError) {
+                    arrRepsponse.status = false;
+                    arrRepsponse.message = "Token Expired";
+                }
+            }
+            break;
+
         default:
             arrRepsponse.message = "Invalid Action";
             break;

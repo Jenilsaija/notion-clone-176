@@ -78,7 +78,7 @@ const Menu = () => {
                     type: "success"
                 })
                 hanldeGetPages();
-                Router.push("/app/pages/edit?ref=" + btoa(JSON.stringify({recid:res.data.recid})));
+                Router.push("/app/pages/edit/" + btoa(JSON.stringify({recid:res.data.exportId})));
             } else {
                 toast({
                     title: res.data.message,

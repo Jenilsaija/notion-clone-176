@@ -3,10 +3,10 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { GenralContext } from "@/Context/GeneralContext";
 import { getCookie } from "@/lib/cokkies.lib";
+import axios from "axios";
 import { ThemeProvider as NextThemesProvider } from "next-themes"
 import { useRouter } from "next/navigation";
 import React, { Suspense, useEffect, useRef, useState } from 'react'
-import { SWRConfig } from "swr";
 
 function Layout({ children }) {
   const [title, setTitle] = useState("Data Fetching");
@@ -14,10 +14,31 @@ function Layout({ children }) {
 
   const Router = useRouter();
   useEffect(() => {
-    if (!getCookie('userToken')) {
+    const logout=checktoken();
+    if (logout) {
       Router.push("/login");
     }
   }, []);
+
+  const checktoken = () => {
+    //code is use to validate user.
+    let token = getCookie('userToken');
+    
+    const objReq = {
+        "action": "VALIDATE",
+        "token": token
+    }
+    
+    axios.post("/api/auth", objReq).then((res) => {
+        if (!res.data.status) {
+            document.cookie.replace('userToken', '', { expires: 0 });
+            return true;
+        }else{
+          return false;
+        }
+    })
+}
+  
   return (
     <GenralContext.Provider value={{ setTitle, setCategory }}>
       <NextThemesProvider

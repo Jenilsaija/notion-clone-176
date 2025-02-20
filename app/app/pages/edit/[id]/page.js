@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { getCookie } from '@/lib/cokkies.lib';
 import axios from 'axios';
 import { useToast } from '@/hooks/use-toast';
@@ -14,6 +14,7 @@ import List from '@editorjs/list';
 import LinkTool from '@editorjs/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { GenralContext } from '@/Context/GeneralContext';
 
 const page = ({ params }) => {
   let ref = React.use(params);
@@ -21,7 +22,7 @@ const page = ({ params }) => {
   const { toast } = useToast();
   const [note, setNote] = useState({});
   const [editorstate, setEditorstate] = useState(null);
-
+  const {setTitle}=useContext(GenralContext);
   function getNoteData() {
     let ref1 = atob(ref);
     ref1 = JSON.parse(ref1);
@@ -83,7 +84,8 @@ const page = ({ params }) => {
   useEffect(()=>{
     geteditor();
   },[note])
-
+  console.log(note);
+  
   const geteditor = () => {
     if (editorstate !== null) return; // Skip initialization if the editor already
     if (note?.notedata !== undefined && note?.notedata !== null) {
@@ -158,6 +160,9 @@ const page = ({ params }) => {
       updateNote(heading, savedData);
     }
   };
+  useEffect(()=>{
+    setTitle(note.title);
+  },[note])
 
   return (
     <div>

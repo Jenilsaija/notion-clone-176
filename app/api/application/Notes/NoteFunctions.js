@@ -39,3 +39,24 @@ export const fetchAllNotes = async (requesdata) => {
 
     return arrResponse
 }
+
+export const AddNote =async ()=>{
+    let arrResponse={
+        status:false,
+        message:"Invalid Api Response"
+    }
+    const res = await db.query("INSERT INTO notes (addedby,addedat) VALUES ('"+global.User.recid+"',NOW())");
+    if (res[0].affectedRows>0) {
+        arrResponse = {
+            status:true,
+            exportId:res[0].insertId,
+            message:"Note Created Successfully"
+        }
+    }else{
+        arrResponse = {
+            status:false,
+            message:"Something went wrong"
+        }
+    }
+    return arrResponse;
+}

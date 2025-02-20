@@ -23,7 +23,7 @@ export default function LoginPage() {
     }
     axios.post("/api/auth", objReq).then((res) => {
       if (res.data.status) {
-        setCookie("userToken", btoa(res.data.userToken),1);
+        setCookie("userToken", btoa(res.data.data.userToken),1);
         Router.push("/")
       } else {
         toast({
