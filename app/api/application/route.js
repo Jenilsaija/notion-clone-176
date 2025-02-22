@@ -1,4 +1,3 @@
-import db from "@/lib/db.lib";
 import { NextResponse } from "next/server";
 import { AddNote, fetchAllNotes, UpdateNote } from "./Notes/NoteFunctions";
 import { validateToken } from "./validation";
