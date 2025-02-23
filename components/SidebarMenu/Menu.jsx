@@ -50,7 +50,8 @@ const Menu = () => {
                     return {
                         title: item.title,
                         icon: <File />,
-                        href: "/app/pages/edit/" + btoa(JSON.stringify({recid:item.recid}))
+                        href: "/app/pages/edit/" + btoa(JSON.stringify({recid:item.recid})),
+                        noteid:item.recid
                     }
                 }))
             } else {

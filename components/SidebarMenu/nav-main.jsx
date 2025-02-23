@@ -1,6 +1,6 @@
 "use client"
 
-import { PlusIcon } from "lucide-react";
+import { Ellipsis, PlusIcon, Trash2 } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import Link from "next/link";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 export function NavMain({
   items,
@@ -18,16 +19,26 @@ export function NavMain({
   return (
     (<SidebarGroup>
       <SidebarGroupLabel>Pages</SidebarGroupLabel>
-      <SidebarMenu>
-        {items.map((item, index) => (
-          <SidebarMenuItem key={index}>
-            <Link href={item.href} alt={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon}
-                <span>{item.title}</span>
-              </SidebarMenuButton>
-            </Link>
-          </SidebarMenuItem>
+      <SidebarMenu >
+        {items.map((item, index) => index < 5 && (
+          <>
+            <SidebarMenuItem key={index}  className="flex justify-between w-full">
+              <Link href={item.href} alt={item.title} className="w-full">
+                <SidebarMenuButton tooltip={item.title} >
+                  {item.icon}
+                  <span className="text-left">{`${item?.title ? item?.title?.substring(0,20) :"" } ${item?.title?.length >= 20 ? "..." : ""}`}</span>
+                </SidebarMenuButton>
+              </Link>
+              <DropdownMenu inset={"top"}>
+                <DropdownMenuTrigger>
+                  <Ellipsis/>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem className="flex justify-between cursor-pointer" onClick={handledelete(item?.noteid)}>Delete <Trash2/></DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </>
         ))}
         <SidebarMenuItem>
           <SidebarMenuButton tooltip={"Add Page"} onClick={CreateNewPage}>
@@ -38,4 +49,8 @@ export function NavMain({
       </SidebarMenu>
     </SidebarGroup>)
   );
+}
+
+function handledelete(noteid) {
+  //wrtie delete function
 }

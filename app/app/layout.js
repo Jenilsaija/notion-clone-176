@@ -13,30 +13,32 @@ function Layout({ children }) {
   const [category, setCategory] = useState("General");
 
   const Router = useRouter();
-  useEffect(() => {
-    const logout=checktoken();
-    if (logout) {
-      Router.push("/login");
+  useEffect(async() => {
+    async function validate() {
+      const logout= await checktoken();
+      if (logout) {
+        Router.push("/login");
+      }
     }
+    validate();
   }, []);
 
-  const checktoken = () => {
+  const checktoken = async() => {
     //code is use to validate user.
     let token = getCookie('userToken');
     
     const objReq = {
         "action": "VALIDATE",
-        "token": token
+        "token": atob(token)
     }
     
-    axios.post("/api/auth", objReq).then((res) => {
-        if (!res.data.status) {
-            document.cookie.replace('userToken', '', { expires: 0 });
-            return true;
-        }else{
-          return false;
-        }
-    })
+    const res =await axios.post("/api/auth", objReq);
+    if (!res.data.status) {
+        document.cookie.replace('userToken', '', { expires: 0 });
+        return true;
+    }else{
+      return false;
+    }
 }
   
   return (
