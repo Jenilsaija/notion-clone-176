@@ -24,7 +24,7 @@ export const fetchAllNotes = async (requesdata) => {
             break;
     }
 
-    const result = await db.query(query + "order by recid desc;");
+    const result = await db.query(query + " order by recid desc;");
     if (result[0].length>0) {
         arrResponse = {
             status: true,
