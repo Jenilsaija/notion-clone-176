@@ -1,7 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { getCookie } from '@/lib/cokkies.lib';
-import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react'
 import { useToast } from '@/hooks/use-toast';
 import RawTool from '@editorjs/raw';
 import SimpleImage from "@editorjs/simple-image";
@@ -15,27 +13,23 @@ import LinkTool from '@editorjs/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { GenralContext } from '@/Context/GeneralContext';
-import { getNoteData, updateNote } from './commonFunc';
+import { UpdateNote } from '@/app/api/application/Notes/NoteFunctions';
 import useSWR from 'swr';
+import { getNoteData } from './commonFunc';
 
 const page = ({ params }) => {
   let ref = React.use(params);
   ref = ref?.id?.slice(0, -3) + "=";
   const { toast } = useToast();
   const [editorstate, setEditorstate] = useState(null);
-  const {setTitle}=useContext(GenralContext);
+  const { setTitle } = useContext(GenralContext);
   
-  const {data:note, mutate:notemutate}=useSWR(["getNoteData",ref], ()=> ref !== undefined && getNoteData({ref}),{revalidateOnFocus:false,keepPreviousData:true});
+  const {data:note, mutate:notemutate}=useSWR(["getNoteData"],()=>getNoteData({ref}),{revalidateOnFocus:true,keepPreviousData:true});
+console.log(note,"note");
 
   useEffect(() => {
-    getNoteData()
-  }, [])
-
-  useEffect(()=>{
-    if (note!==undefined) {
-      geteditor();
-    }
-  },[note])
+    geteditor();
+  }, [note])
 
   const geteditor = () => {
     if (editorstate !== null) return; // Skip initialization if the editor already
@@ -102,31 +96,29 @@ const page = ({ params }) => {
         // readOnly: readOnly,
       });
       setEditorstate(editorInstance);
-  }
+    }
   }
 
   const handlesave = async () => {
     if (editorstate) {
       const savedData = await editorstate.save();
-      updateNote({
+      UpdateNote({
         ref,
         savedData,
-        toast,
-        title:note?.title,
-        notemutate
+        toast
       });
     }
   };
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     setTitle(note?.title);
-  },[note])
+  }, [note])
 
   return (
     <div>
-        <h1 className='mx-24 text-5xl my-10'> <Input placeholder="Please Enter Note Title" value={note?.title} onChange={(e) => { note.title = e.target.value }} /> </h1>
-        <div id="editorcustom" ></div>
-        <Button onClick={handlesave} className='mx-24 flex justify-end'> save</Button>
+      <h1 className='mx-24 text-5xl my-10'> <Input placeholder="Please Enter Note Title" value={note?.title} onChange={(e) => { note.title= e.target.value }} /> </h1>
+      <div id="editorcustom" ></div>
+      <Button onClick={()=>{handlesave()}} className='mx-24 flex justify-end'> save</Button>
     </div>
   )
 }

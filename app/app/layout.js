@@ -13,7 +13,7 @@ function Layout({ children }) {
   const [category, setCategory] = useState("General");
 
   const Router = useRouter();
-  useEffect(async() => {
+  useEffect(() => {
     async function validate() {
       const logout= await checktoken();
       if (logout) {

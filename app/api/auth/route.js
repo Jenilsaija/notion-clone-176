@@ -13,7 +13,7 @@ export async function POST(req) {
     switch (action) {
         case "LOGIN":
             const res = await db.query("SELECT * FROM users WHERE email='" + requesdata['email'] + "' AND password='" + requesdata['password'] + "'");
-            const token = jwt.sign({ data: res[0][0], exp: Math.floor(Date.now() / 1000) + (60 * 60) }, seckey);
+            const token = jwt.sign({ data: res[0][0], exp: Math.floor(Date.now() / 2000) + (60 * 60) }, seckey);
             arrRepsponse = {
                 status: true,
                 data: {

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { makeRequest } from "@/lib/axios.lib";
 
 export function NavMain({
   items,
@@ -20,7 +21,7 @@ export function NavMain({
     (<SidebarGroup>
       <SidebarGroupLabel>Pages</SidebarGroupLabel>
       <SidebarMenu >
-        {items.map((item, index) => index < 5 && (
+        {items !== undefined && items?.map((item, index) => index < 5 && (
           <>
             <SidebarMenuItem key={index}  className="flex justify-between w-full">
               <Link href={item.href} alt={item.title} className="w-full">
@@ -34,7 +35,7 @@ export function NavMain({
                   <Ellipsis/>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem className="flex justify-between cursor-pointer" onClick={handledelete(item?.noteid)}>Delete <Trash2/></DropdownMenuItem>
+                  <DropdownMenuItem className="flex justify-between cursor-pointer" onClick={()=>{handledelete(item?.noteid)}}>Delete <Trash2/></DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </SidebarMenuItem>
@@ -51,6 +52,24 @@ export function NavMain({
   );
 }
 
-function handledelete(noteid) {
-  //wrtie delete function
+async function handledelete(noteid) {
+  let arrReqParams = {
+    "action": "NOTES.DELETE",
+    "sanitize": {
+      "notes_id": noteid
+    }
+  }
+  const objResponse = await makeRequest("/api/application",arrReqParams);
+  if (objResponse.status===200 && objResponse.data.status) {
+    toast({
+      title: objResponse.data.message,
+      type: "success"
+    })
+    hanldeGetPages();
+  } else {
+    toast({
+      title: objResponse.data.message,
+      type: "error"
+    })
+  }
 }
