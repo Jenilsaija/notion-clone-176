@@ -38,24 +38,26 @@ const PassWordModal = (parmas) => {
         }
     }
 
+    const hanldeOpen=()=>{
+        if(password === null) {
+            setPasswordDialog(true);
+        }else{
+            protectNote({ ref, password:null, toast, notemutate });
+        }
+    }
+    
     return (
         <div>
             <Dialog className="w-auto" open={passwordDialog} >
-                <DialogTrigger className='flex' onClick={() => { setPasswordDialog(false) }}>
-                    <Button variant="outline" size="icon" onClick={() => {
-                        if(password === null) {
-                            setPasswordDialog(true);
-                        }else{
-                            protectNote({ ref, password:null, toast, notemutate });
-                        }
-                    }}>
+                <DialogTrigger className='flex' >
+                    <Button variant="outline" size="icon" onClick={hanldeOpen}>
                         {password === null ? <LockKeyhole /> : <LockKeyholeOpen />}
                     </Button>
                 </DialogTrigger>
                 <DialogContent>
                     {
                         password === null ?
-                            (<><DialogTitle>Protect Your Note</DialogTitle>
+                            (<><DialogTitle className='flex flex-row gap-3'><span className='cursor-pointer' onClick={()=>{setPasswordDialog(false)}}><ArrowLeft size={20} /></span>Protect Your Note</DialogTitle>
                                 <div className='my-1 flex w-auto gap-2'>
                                     <Input placeholder="Enter Password" type="password" className="w-full" value={password} onChange={(e) => { setPassword(e.target.value) }} />
                                 </div>
