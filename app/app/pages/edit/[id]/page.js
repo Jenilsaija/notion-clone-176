@@ -15,8 +15,10 @@ import LinkTool from '@editorjs/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { GenralContext } from '@/Context/GeneralContext';
-import { getNoteData, updateNote } from './commonFunc';
+import { getNoteData, protectNote, updateNote } from './commonFunc';
 import useSWR from 'swr';
+import PassWordModal from '@/components/PassWordModal';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const page = ({ params }) => {
   let ref = React.use(params);
@@ -24,7 +26,8 @@ const page = ({ params }) => {
   const { toast } = useToast();
   const [editorstate, setEditorstate] = useState(null);
   const {setTitle}=useContext(GenralContext);
-  
+  const [passwordApproved, setPasswordApproved] = useState(false);  
+
   const {data:note, mutate:notemutate}=useSWR(["getNoteData",ref], ()=> ref !== undefined && getNoteData({ref}),{revalidateOnFocus:false,keepPreviousData:true});
 
   useEffect(() => {
@@ -35,11 +38,11 @@ const page = ({ params }) => {
     if (note!==undefined) {
       geteditor();
     }
-  },[note])
+  },[note,passwordApproved])
 
   const geteditor = () => {
     if (editorstate !== null) return; // Skip initialization if the editor already
-    if (note?.notedata !== undefined && note?.notedata !== null) {
+    if (note?.notedata !== undefined && note?.notedata !== null && passwordApproved) {
       const editorInstance = new EditorJS({
         holder: 'editorcustom',
         placeholder: 'Let`s write an awesome notes!',
@@ -120,13 +123,37 @@ const page = ({ params }) => {
   
   useEffect(()=>{
     setTitle(note?.title);
+    if (note?.password === null) {
+      setPasswordApproved(true);
+    }
   },[note])
 
   return (
     <div>
-        <h1 className='mx-24 text-5xl my-10'> <Input placeholder="Please Enter Note Title" value={note?.title} onChange={(e) => { note.title = e.target.value }} /> </h1>
-        <div id="editorcustom" ></div>
-        <Button onClick={handlesave} className='mx-24 flex justify-end'> save</Button>
+      <div className='flex gap-2 mx-20 text-5xl my-10'>
+        <h1 className='w-full'> 
+          {passwordApproved && <Input placeholder="Please Enter Note Title" value={note?.title} onChange={(e) => { note.title = e.target.value }} />
+          || <><Skeleton className={"w-full h-9  rounded-sm"}/></>} </h1>
+        {note?.password !== undefined && <PassWordModal
+          notepassword = {note?.password}
+          protectNote={protectNote}
+          ref={ref}
+          toast={toast}
+          notemutate={notemutate}
+          setPasswordApproved={setPasswordApproved}
+        />}
+      </div>
+        <div id="editorcustom">{
+           note !== undefined && !passwordApproved &&
+          <Skeleton className={"w-full h-96 px-10 rounded-sm"}/>}</div>
+          <div className='my-2'>
+            {
+              note !== undefined && !passwordApproved &&
+              <Skeleton className={"w-24 h-9 rounded-sm"}/>
+              ||
+              <Button onClick={handlesave} className='mx-24 flex justify-end'>save</Button>
+            }
+          </div>
     </div>
   )
 }

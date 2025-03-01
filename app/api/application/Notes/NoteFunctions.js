@@ -103,3 +103,25 @@ export const DeleteNote = async (requestbody)=>{
     }
     return arrResponse;
 }
+
+export const ProtectNote = async (requestbody)=>{
+    let arrResponse={
+        status:false,
+        message:"Invalid Api Response"
+    }
+    const recid = requestbody['sanitize']['notes_id'];
+    const password = requestbody['update']['password'];
+    const res = await db.query("UPDATE notes SET password=? WHERE recid='"+recid+"'",[password]);
+    if (res[0].affectedRows>0) {
+        arrResponse = {
+            status:true,
+            message:password === null ?"Note UnProtected Successfully":"Note Protected Successfully"
+        }
+    }else{
+        arrResponse = {
+            status:false,
+            message:"Something went wrong"
+        }
+    }
+    return arrResponse;
+}

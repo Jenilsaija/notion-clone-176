@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { AddNote, DeleteNote, fetchAllNotes, UpdateNote } from "./Notes/NoteFunctions";
+import { AddNote, DeleteNote, fetchAllNotes, ProtectNote, UpdateNote } from "./Notes/NoteFunctions";
 import { validateToken } from "./validation";
 
 export async function POST(req) {
@@ -41,6 +41,11 @@ export async function POST(req) {
         case "NOTES.DELETE":
             arrResponse = await DeleteNote(requestbody);
             break;
+
+        case "NOTES.PROTECT":
+            arrResponse = await ProtectNote(requestbody);
+            break;
+
         default:
             arrResponse.message="Invalid action";
             break;

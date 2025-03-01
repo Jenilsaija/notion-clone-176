@@ -14,7 +14,7 @@ const Menu = () => {
     const MenuItem = [{
         title: 'Home',
         icon: <Home />,
-        href: "#"
+        href: "/app/dashboard"
     },
     {
         title: 'Categories',
@@ -24,7 +24,7 @@ const Menu = () => {
     {
         title: 'Pages',
         icon: <NotebookText />,
-        href: "#"
+        href: "/app/pages"
     }];
 
     async function hanldeGetPages() {
@@ -91,7 +91,7 @@ const Menu = () => {
                         return (
                             <SidebarMenu key={index}>
                                 <SidebarMenuItem>
-                                    <SidebarMenuButton tooltip={item.title}>
+                                    <SidebarMenuButton tooltip={item.title} onClick={()=>Router.push(item.href)}>
                                         {item.icon}
                                         <span>{item.title}</span>
                                     </SidebarMenuButton>

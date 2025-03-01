@@ -66,3 +66,37 @@ export const updateNote = async (params) => {
     }
     return null;
 }
+
+export const protectNote = async (params) => {
+    const {
+        ref,
+        password,
+        toast,
+        notemutate
+    } = params;
+    let ref1 = atob(ref);
+    ref1 = JSON.parse(ref1);
+
+    const objReq = {
+        action: "NOTES.PROTECT",
+        sanitize: { notes_id: ref1?.recid },
+        update: {
+            password: password
+        }
+    }
+    const res = await makeRequest("/api/application", objReq);
+
+    if (res.data.status) {
+        toast({
+            title: res.data.message,
+            type: "success"
+        })
+        notemutate();
+    } else {
+        toast({
+            title: res.data.message,
+            type: "error"
+        })
+    }
+    return null;
+}
