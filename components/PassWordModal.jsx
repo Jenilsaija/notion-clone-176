@@ -56,7 +56,7 @@ const PassWordModal = (parmas) => {
                 </DialogTrigger>
                 <DialogContent>
                     {
-                        password === null ?
+                        notepassword === null ?
                             (<><DialogTitle className='flex flex-row gap-3'><span className='cursor-pointer' onClick={()=>{setPasswordDialog(false)}}><ArrowLeft size={20} /></span>Protect Your Note</DialogTitle>
                                 <div className='my-1 flex w-auto gap-2'>
                                     <Input placeholder="Enter Password" type="password" className="w-full" value={password} onChange={(e) => { setPassword(e.target.value) }} />
