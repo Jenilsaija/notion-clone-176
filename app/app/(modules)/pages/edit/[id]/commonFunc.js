@@ -100,3 +100,37 @@ export const protectNote = async (params) => {
     }
     return null;
 }
+
+export async function UpdateNoteVisibility(params) {
+    const {
+        ref,
+        visibility,
+        toast,
+        notemutate
+    } = params;
+
+    let ref1 = atob(ref);
+    ref1 = JSON.parse(ref1);
+    const objReq = {
+        action: "NOTEVISIBILITY.UPDATE",
+        sanitize: { notes_id: ref1?.recid },
+        update: {
+            visibility: visibility
+        }
+    }
+    const res = await makeRequest("/api/application", objReq);
+
+    if (res.data.status) {
+        toast({
+            title: res.data.message,
+            type: "success"
+        })
+        notemutate();
+    } else {
+        toast({
+            title: res.data.message,
+            type: "error"
+        })
+    }
+    return null;
+}

@@ -125,3 +125,50 @@ export const ProtectNote = async (requestbody)=>{
     }
     return arrResponse;
 }
+
+export const UpdateNoteVisibility = async (requestbody)=>{
+    let arrResponse={
+        status:false,
+        message:"Invalid Api Response"
+    }
+    const recid = requestbody['sanitize']['notes_id'];
+    const visibility = requestbody['update']['visibility'];
+    const res = await db.query("UPDATE notes SET visibility=? WHERE recid='"+recid+"'",[visibility]);
+    if (res[0].affectedRows>0) {
+        arrResponse = {
+            status:true,
+            message:"Note Visibility Updated Successfully"
+        }
+    }else{
+        arrResponse = {
+            status:false,
+            message:"Something went wrong"
+        }
+    }
+    return arrResponse;
+}
+
+export async function viewNoteValidate(requestbody) {
+    let arrResponse = {
+        status: false,
+        message: "Invalid Api Repsonse"
+    }
+    const recid = requestbody['sanitize']['notes_id'];
+    const result = await db.query("select visibility,password from notes where recid='"+recid+"'");
+    
+    if (result[0].length>0) {
+        arrResponse = {
+            status: true,
+            data:{
+                visibility: result[0][0].visibility,
+                password: result[0][0].password
+            },
+        }
+    }else{
+        arrResponse = {
+            status: false,
+            message: "No Record Available"
+        }
+    }
+    return arrResponse;
+}

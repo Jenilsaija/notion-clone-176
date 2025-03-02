@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { AddNote, DeleteNote, fetchAllNotes, ProtectNote, UpdateNote } from "./Notes/NoteFunctions";
+import { AddNote, DeleteNote, fetchAllNotes, ProtectNote, UpdateNote, UpdateNoteVisibility, viewNoteValidate } from "./Notes/NoteFunctions";
 import { validateToken } from "./validation";
 
 export async function POST(req) {
@@ -44,6 +44,14 @@ export async function POST(req) {
 
         case "NOTES.PROTECT":
             arrResponse = await ProtectNote(requestbody);
+            break;
+
+        case "NOTEVISIBILITY.UPDATE":
+            arrResponse = await UpdateNoteVisibility(requestbody);
+            break;
+
+        case "VIEWNOTE.VALIDATE":
+            arrResponse = await viewNoteValidate(requestbody);
             break;
 
         default:

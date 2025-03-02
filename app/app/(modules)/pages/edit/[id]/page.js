@@ -15,24 +15,23 @@ import LinkTool from '@editorjs/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { GenralContext } from '@/Context/GeneralContext';
-import { getNoteData, protectNote, updateNote } from './commonFunc';
+import { getNoteData, protectNote, updateNote, UpdateNoteVisibility } from './commonFunc';
 import useSWR from 'swr';
 import PassWordModal from '@/components/PassWordModal';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CopyCheck, Globe, User, Users } from 'lucide-react';
 
 const page = ({ params }) => {
   let ref = React.use(params);
-  ref = ref?.id?.slice(0, -3) + "=";
+  ref = ref?.id;
+  
   const { toast } = useToast();
   const [editorstate, setEditorstate] = useState(null);
   const {setTitle}=useContext(GenralContext);
-  const [passwordApproved, setPasswordApproved] = useState(false);  
+  const [passwordApproved, setPasswordApproved] = useState(false); 
 
   const {data:note, mutate:notemutate}=useSWR(["getNoteData",ref], ()=> ref !== undefined && getNoteData({ref}),{revalidateOnFocus:false,keepPreviousData:true});
-
-  useEffect(() => {
-    getNoteData()
-  }, [])
 
   useEffect(()=>{
     if (note!==undefined) {
@@ -142,6 +141,27 @@ const page = ({ params }) => {
           notemutate={notemutate}
           setPasswordApproved={setPasswordApproved}
         />}
+        <Select onValueChange={(value)=>{UpdateNoteVisibility({ref,visibility:value,toast,notemutate})}} value={note?.visibility}>
+        <SelectTrigger className="w-[130px]">
+          <SelectValue/>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem  value="PV" selected><span className='flex flex-row py-auto gap-2'><User size={20}/>Private</span></SelectItem>
+            <SelectItem  value="PB"><span className='flex flex-row py-auto gap-2'><Globe size={20}/>Public</span></SelectItem>
+            <SelectItem  value="SH"><span className='flex flex-row py-auto gap-2'><Users size={20}/>Shared</span></SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+          {
+            note?.visibility ==="PB" && 
+           <Button variant="outline" size="icon" onClick={()=>{
+             navigator.clipboard.writeText(window.location.origin+"/app/view/"+ref);
+             toast({title:"Link Copied",type:"success"})
+             }}>
+            <CopyCheck />
+           </Button>
+          }
       </div>
         <div id="editorcustom">{
            note !== undefined && !passwordApproved &&

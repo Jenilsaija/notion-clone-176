@@ -24,7 +24,7 @@ const PassWordModal = (parmas) => {
     useEffect(() => {
         if (password !== null) {
             setPasswordDialog(true);
-            setPasswordApproved(false);
+            // setPasswordApproved(false);
         }
     }, [password])
 
