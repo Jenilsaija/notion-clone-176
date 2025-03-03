@@ -148,27 +148,3 @@ export const UpdateNoteVisibility = async (requestbody)=>{
     return arrResponse;
 }
 
-export async function viewNoteValidate(requestbody) {
-    let arrResponse = {
-        status: false,
-        message: "Invalid Api Repsonse"
-    }
-    const recid = requestbody['sanitize']['notes_id'];
-    const result = await db.query("select visibility,password from notes where recid='"+recid+"'");
-    
-    if (result[0].length>0) {
-        arrResponse = {
-            status: true,
-            data:{
-                visibility: result[0][0].visibility,
-                password: result[0][0].password
-            },
-        }
-    }else{
-        arrResponse = {
-            status: false,
-            message: "No Record Available"
-        }
-    }
-    return arrResponse;
-}

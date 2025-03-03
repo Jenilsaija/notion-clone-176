@@ -50,10 +50,6 @@ export async function POST(req) {
             arrResponse = await UpdateNoteVisibility(requestbody);
             break;
 
-        case "VIEWNOTE.VALIDATE":
-            arrResponse = await viewNoteValidate(requestbody);
-            break;
-
         default:
             arrResponse.message="Invalid action";
             break;

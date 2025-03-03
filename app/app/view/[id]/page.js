@@ -2,7 +2,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr';
-import { getNoteData } from '../../(modules)/pages/edit/[id]/commonFunc';
 import RawTool from '@editorjs/raw';
 import SimpleImage from "@editorjs/simple-image";
 import Embed from '@editorjs/embed';
@@ -12,7 +11,7 @@ import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
 import LinkTool from '@editorjs/link';
-import {  getViewnoteValidateParams } from './CommonFunc';
+import {  getNoteData, getViewnoteValidateParams } from './CommonFunc';
 import PassWordModal from '@/components/PassWordModal';
 import NotFound from '@/components/NotFound';
 
@@ -23,7 +22,7 @@ const page = ({ params }) => {
     const [editorstate, setEditorstate] = useState(null);
     const [passwordApproved, setPasswordApproved] = useState(false); 
     const { data: viewnotevalidateparams } = useSWR(["viewnotevalidateparams", ref], () => ref !== undefined && getViewnoteValidateParams({ ref }), { revalidateOnFocus: false, keepPreviousData: true });
-    
+
     const { data: note, mutate: notemutate } = useSWR(["getNoteData", ref, viewnotevalidateparams?.visibility,passwordApproved], () => ref !== undefined && viewnotevalidateparams?.visibility !== undefined && viewnotevalidateparams?.visibility !== "PV" && passwordApproved && getNoteData({ ref }), { revalidateOnFocus: false, keepPreviousData: true });
 
     useEffect(() => {
@@ -40,7 +39,7 @@ const page = ({ params }) => {
 
     const geteditor = () => {
         if (editorstate !== null) return; // Skip initialization if the editor already
-        if (note?.notedata !== undefined && note?.notedata !== null && passwordApproved) {
+        if (note?.note !== undefined && note?.note !== null && passwordApproved) {
             const editorInstance = new EditorJS({
                 holder: 'editorcustom',
                 placeholder: 'Let`s write an awesome notes!',
@@ -99,7 +98,7 @@ const page = ({ params }) => {
                     },
 
                 },
-                data: JSON.parse(note?.notedata),
+                data: JSON.parse(note?.note),
                 readOnly: true,
             });
             setEditorstate(editorInstance);
