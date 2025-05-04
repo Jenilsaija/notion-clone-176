@@ -5,10 +5,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes"
 
 export function ThemeProvider({
   children,
-  ...params
+  ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
-  const [props,setProps] = React.useState({});
-  React.useEffect(() => { setProps(params) }, [props.defaultTheme])
-  
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>
 }

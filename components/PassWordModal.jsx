@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, LockKeyhole, LockKeyholeOpen } from 'lucide-react';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/Dialog';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/Dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import Link from 'next/link';
@@ -38,22 +38,27 @@ const PassWordModal = (parmas) => {
         }
     }
 
-    const hanldeOpen=()=>{
+    const handleOpen = () => {
         if(password === null) {
             setPasswordDialog(true);
-        }else{
+        } else {
             protectNote({ ref, password:null, toast, notemutate });
         }
     }
     
     return (
         <div>
-            <Dialog className="w-auto" open={passwordDialog} >
-                <DialogTrigger className='flex' >
-                    <Button variant="outline" size="icon" onClick={hanldeOpen}>
-                        {password === null ? <LockKeyhole /> : <LockKeyholeOpen />}
-                    </Button>
-                </DialogTrigger>
+            <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={handleOpen}
+                aria-haspopup="dialog" 
+                aria-expanded={passwordDialog}
+            >
+                {password === null ? <LockKeyhole /> : <LockKeyholeOpen />}
+            </Button>
+            
+            <Dialog open={passwordDialog} onOpenChange={setPasswordDialog}>
                 <DialogContent>
                     {
                         notepassword === null ?

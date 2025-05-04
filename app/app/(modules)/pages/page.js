@@ -1,5 +1,5 @@
 "use client";
-import React from 'react'
+import React, { useState } from 'react'
 import DataTable from './commonComponents/DataTable';
 import { columns } from './commonComponents/TableColumn';
 import useSWR from 'swr';
@@ -23,12 +23,16 @@ const page = () => {
   const { toast } = useToast();
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [selectedNoteId, setSelectedNoteId] = React.useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10);
 
   async function hanldeGetPages() {
     const objReq = {
       "action": "NOTES.LIST",
-      "sanitizer": {
+      "sanitize": {
         "searchby": "ALL",
+        "page": currentPage,
+        "pageSize": pageSize
       }
     }
     const objResponse = await makeRequest("/api/application", objReq);
@@ -72,17 +76,33 @@ const page = () => {
           arrTempMenuPages.push(tempobj);
         }
       }
-      return arrTempMenuPages;
+      return {
+        notes: arrTempMenuPages,
+        pagination: objResponse.data.pagination
+      };
     } else {
       toast({
         title: objResponse.data.message,
         variant: "destructive"
       });
+      return {
+        notes: [],
+        pagination: {
+          page: currentPage,
+          pageSize,
+          totalCount: 0,
+          totalPages: 0
+        }
+      };
     }
   }
 
-  const {data:notedata, error:err, mutate:noteMutate} = useSWR(["gettingNotes"], () => hanldeGetPages(), {keepPreviousData:true});
+  const {data, error, mutate} = useSWR(["gettingNotes", currentPage, pageSize], () => hanldeGetPages(), {keepPreviousData:true});
   
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
   const handleDeleteClick = (noteId) => {
     setSelectedNoteId(noteId);
     setShowDeleteDialog(true);
@@ -106,7 +126,7 @@ const page = () => {
             variant: "default",
           });
           setShowDeleteDialog(false);
-          noteMutate(); // Refresh the list
+          mutate(); // Refresh the list
         } else {
           toast({
             title: response.data.message || "Failed to delete note",
@@ -125,7 +145,12 @@ const page = () => {
 
   return (
     <div>
-      <DataTable columns={columns} data={notedata} />
+      <DataTable 
+        columns={columns} 
+        data={data?.notes || []} 
+        pagination={data?.pagination}
+        onPageChange={handlePageChange}
+      />
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>

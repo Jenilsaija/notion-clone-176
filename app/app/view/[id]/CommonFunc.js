@@ -1,4 +1,4 @@
-import axios from "axios";
+import { makeRequest } from "@/lib/axios.lib";
 
 export const getViewnoteValidateParams = async (params) => { 
     const {
@@ -10,8 +10,10 @@ export const getViewnoteValidateParams = async (params) => {
         action: "VIEWNOTE.VALIDATE",
         sanitize: { notes_id: ref1?.recid }
     }
-    const res = await axios.post("/api/view", objReq);
-    if (res.data.status) {
+    
+    const res = await makeRequest("/api/view", objReq);
+    
+    if (res && res.status === 200 && res.data.status) {
         return res.data.data;
     }
     return null;
@@ -30,9 +32,10 @@ export async function getNoteData(params) {
                 "notes_id": ref1?.recid
             }
         }
-        const objResponse = await axios.post("/api/view",objReq);
+        
+        const objResponse = await makeRequest("/api/view", objReq);
 
-        if (objResponse?.status === 200 && objResponse?.data?.status) {
+        if (objResponse && objResponse.status === 200 && objResponse.data.status) {
             let arrnotesdata = objResponse.data.data;
             if (arrnotesdata?.note === null) {
                 arrnotesdata.note = "{}"
@@ -42,5 +45,6 @@ export async function getNoteData(params) {
         return null;
     } catch (error) {
         console.log(error);
+        return null;
     }
 }

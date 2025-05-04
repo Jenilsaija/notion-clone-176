@@ -147,7 +147,7 @@ const page = ({ params }) => {
                 if (noteId) {
                     const requestParams = {
                         action: "NOTES.UPDATE",
-                        sanitizer: {
+                        sanitize: {
                             notes_id: noteId
                         },
                         update: {
@@ -229,14 +229,11 @@ const page = ({ params }) => {
     };
 
     return (
-        <div className='container mx-auto'>
-            <div className='w-full flex justify-between items-center my-16'>
-                <h1 className='text-2xl'>
-                    {!passwordApproved || note === undefined ?<Skeleton className={"w-64 h-9 rounded-sm"} /> : note?.title}
-                </h1>
-                
-                {passwordApproved && note && (
-                    <div className='flex gap-2'>
+        <div className="flex-col flex h-full">
+            <div className="p-4 h-fit z-10 flex-none shadow-md flex justify-between items-center bg-white dark:bg-slate-900">
+                <h1 className="text-xl font-semibold">{note?.title || "Untitled Note"}</h1>
+                {viewnotevalidateparams?.isOwner && (
+                    <div className="flex items-center space-x-2">
                         {isEditing ? (
                             <>
                                 <Button onClick={handleSave} variant="default">Save</Button>
@@ -247,7 +244,12 @@ const page = ({ params }) => {
                                 <Button onClick={handleEdit} variant="outline" size="icon">
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
-                                <Button onClick={() => setShowDeleteDialog(true)} variant="outline" size="icon" className="text-destructive">
+                                <Button
+                                    onClick={() => setShowDeleteDialog(true)}
+                                    variant="outline"
+                                    size="icon"
+                                    className="text-destructive hover:bg-destructive/10"
+                                >
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
                             </>

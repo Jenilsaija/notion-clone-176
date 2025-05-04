@@ -1,20 +1,20 @@
 "use client";
 import Loader from "@/components/Loader";
-import { ThemeProvider as NextThemesProvider } from "next-themes"
+import { ThemeProvider } from "@/components/theme-provider";
 import React, { Suspense} from 'react'
 
 function Layout({ children }) {
   return (
-    <NextThemesProvider
+    <ThemeProvider
       attribute="class"
-      defaultTheme={"system"}
+      defaultTheme="system"
       enableSystem
       disableTransitionOnChange
     >
       <Suspense fallback={<Loader/>}>
         {children}
       </Suspense>
-    </NextThemesProvider>
+    </ThemeProvider>
   )
 }
 
