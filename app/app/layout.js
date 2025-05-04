@@ -1,6 +1,7 @@
 "use client";
 import Loader from "@/components/Loader";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import React, { Suspense} from 'react'
 
 function Layout({ children }) {
@@ -11,9 +12,11 @@ function Layout({ children }) {
       enableSystem
       disableTransitionOnChange
     >
-      <Suspense fallback={<Loader/>}>
-        {children}
-      </Suspense>
+      <SidebarProvider>
+        <Suspense fallback={<Loader/>}>
+          {children}
+        </Suspense>
+      </SidebarProvider>
     </ThemeProvider>
   )
 }
