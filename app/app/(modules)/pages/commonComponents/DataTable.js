@@ -3,60 +3,58 @@ import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-tabl
 import React from 'react'
 
 const DataTable = ({
-    columns,
+  columns,
+  data = [],
+}) => {
+  const table = useReactTable({
     data,
-  }) => {
-    const table = useReactTable({
-        data,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-      })
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
   return (
     <div>
       <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                    </TableHead>
+                  )
+                })}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {data !== undefined && data?.map((row,index) => {
+              return (
+                <>
+                  <TableRow
+                    key={index}
+                  >
+                    {Object.keys(row).map((key) => {
+                      return (
+                        <TableCell key={key}>
+                          {row[key]}
+                        </TableCell>
+                      )
+                    })}
+                  </TableRow>
+                </>
+              )
+            })
+          }
+          </TableBody>
+        </Table>
+      </div>
     </div>
   )
 }

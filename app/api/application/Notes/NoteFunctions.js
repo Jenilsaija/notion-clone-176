@@ -8,7 +8,7 @@ export const fetchAllNotes = async (requesdata) => {
     const arrSanitizeParams = requesdata['sanitize'] ? requesdata['sanitize'] : [];
     const searchby = arrSanitizeParams['searchby'] ? arrSanitizeParams['searchby'] : '';
     const search = arrSanitizeParams['search'] ? arrSanitizeParams['search'] : '';
-    let query = "select * from notes where endedat is null";
+    let query = "select * from notes where endedat is null AND addedby ='"+global.User.recid+"'";
 
     switch (searchby) {
         case 'ALL':

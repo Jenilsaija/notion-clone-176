@@ -42,7 +42,7 @@ export function AppSidebar({
   return (
     (<><Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="overflow-auto group-data-[collapsible=icon]:overflow-hidden">
-        <Link href={"/"} alt={"home"} title={"Tech Link Solving"} className="flex justify-center">
+        <Link href={"/"} alt={"home"} title={"Tech Link Solving"} className="flex justify-center pt-2">
           <Image src={"/logo.png"} alt="tlslogo" height={40} width={40} />
           <h1 className="mt-1.5 font-semibold text-2xl group-data-[collapsible=icon]:hidden">Tech <span className="text-blue-700">Link</span> Solving</h1>
         </Link>

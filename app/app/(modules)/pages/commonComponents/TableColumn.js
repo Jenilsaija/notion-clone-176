@@ -2,15 +2,35 @@
 
 export const columns = [
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "id",
+    header: "ID",
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "note",
+    header: "note",
   },
   {
-    accessorKey: "amount",
-    header: "Amount",
+    accessorKey: "Category",
+    header: "category",
   },
+  {
+    accessorKey: "view",
+    header: "View",
+  },
+  {
+    accessorKey: "lock",
+    header: "Lock",
+  },
+  {
+    accessorKey: "visibility",
+    header: "Visibility",
+  },
+  {
+    accessorKey: "edit",
+    header: "Edit",
+  },
+  {
+    accessorKey: "delete",
+    header: "Delete",
+  }
 ]

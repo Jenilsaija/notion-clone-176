@@ -30,9 +30,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { setCookie } from "@/lib/cokkies.lib"
+import { useRouter } from "next/navigation"
 
 export function NavUser() {
   const { isMobile } = useSidebar();
+  const router = useRouter();
   const user = {
     name: "shadcn",
     email: "m@example.com",
@@ -97,7 +100,10 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={()=>{
+              setCookie('userToken', '', { expires: 0 })
+              router.push("/login");
+              }}>
               <LogOut />
               Log out
             </DropdownMenuItem>
