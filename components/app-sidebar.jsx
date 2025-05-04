@@ -27,7 +27,7 @@ import {
 import Image from "next/image"
 import Link from "next/link"
 import Menu from "./SidebarMenu/Menu"
-import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import { Moon, Sun } from "lucide-react";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";

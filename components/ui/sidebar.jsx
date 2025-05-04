@@ -63,8 +63,8 @@ const SidebarProvider = React.forwardRef((
       _setOpen(openState)
     }
 
-    // This sets the cookie to keep the sidebar state.
-    document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+    // This sets the cookie to keep the sidebar state, but only in browser
+    setCookie(SIDEBAR_COOKIE_NAME, openState, SIDEBAR_COOKIE_MAX_AGE);
   }, [setOpenProp, open])
 
   // Helper to toggle the sidebar.
@@ -591,6 +591,13 @@ const SidebarMenuSubButton = React.forwardRef(
   }
 )
 SidebarMenuSubButton.displayName = "SidebarMenuSubButton"
+
+// Function to save to cookie, but only when running in browser environment
+const setCookie = (name, value, maxAge) => {
+  if (typeof document !== 'undefined') {
+    document.cookie = `${name}=${value}; path=/; max-age=${maxAge}`;
+  }
+};
 
 export {
   Sidebar,

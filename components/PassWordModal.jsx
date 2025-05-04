@@ -16,33 +16,32 @@ const PassWordModal = (parmas) => {
         setPasswordApproved
     } = parmas;
 
-    const [password, setPassword] = useState(notepassword);
+    const [password, setPassword] = useState(notepassword || "");
     const [passwordDialog, setPasswordDialog] = useState(false);
-    const [cnfPassword, setCnfPassword] = useState(null);
-    const [error, setError] = useState(null);
+    const [cnfPassword, setCnfPassword] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
-        if (password !== null) {
+        if (notepassword) {
             setPasswordDialog(true);
-            // setPasswordApproved(false);
         }
-    }, [password])
+    }, [notepassword])
 
     const CheckPassword = () => {
         if (password !== cnfPassword) {
             setError("Password does not match");
         } else {
-            setError(null);
+            setError("");
             setPasswordDialog(false);
             setPasswordApproved(true);
         }
     }
 
     const handleOpen = () => {
-        if(password === null) {
+        if(!notepassword) {
             setPasswordDialog(true);
         } else {
-            protectNote({ ref, password:null, toast, notemutate });
+            protectNote({ ref, password: "", toast, notemutate });
         }
     }
     
@@ -55,13 +54,13 @@ const PassWordModal = (parmas) => {
                 aria-haspopup="dialog" 
                 aria-expanded={passwordDialog}
             >
-                {password === null ? <LockKeyhole /> : <LockKeyholeOpen />}
+                {!notepassword ? <LockKeyhole /> : <LockKeyholeOpen />}
             </Button>
             
             <Dialog open={passwordDialog} onOpenChange={setPasswordDialog}>
                 <DialogContent>
                     {
-                        notepassword === null ?
+                        !notepassword ?
                             (<><DialogTitle className='flex flex-row gap-3'><span className='cursor-pointer' onClick={()=>{setPasswordDialog(false)}}><ArrowLeft size={20} /></span>Protect Your Note</DialogTitle>
                                 <div className='my-1 flex w-auto gap-2'>
                                     <Input placeholder="Enter Password" type="password" className="w-full" value={password} onChange={(e) => { setPassword(e.target.value) }} />
@@ -78,7 +77,7 @@ const PassWordModal = (parmas) => {
                                 </div>
                             </>)
                     }
-                    {error !== null && <DialogFooter className="text-red-500 flex justify-start sm:justify-start">{error}</DialogFooter>}
+                    {error && <DialogFooter className="text-red-500 flex justify-start sm:justify-start">{error}</DialogFooter>}
                 </DialogContent>
             </Dialog>
         </div>

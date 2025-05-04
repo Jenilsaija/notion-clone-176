@@ -12,13 +12,47 @@ import {
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { makeRequest } from "@/lib/axios.lib";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 export function NavMain({
   items,
   CreateNewPage,
   hanldeGetPages
 }) {
+  const { toast } = useToast();
+  
+  const handleDelete = async (noteid) => {
+    try {
+      let arrReqParams = {
+        "action": "NOTES.DELETE",
+        "sanitize": {
+          "notes_id": noteid
+        }
+      }
+      const objResponse = await makeRequest("/api/application", arrReqParams);
+      if (objResponse.status === 200 && objResponse.data.status) {
+        toast({
+          title: objResponse.data.message,
+          variant: "default"
+        });
+        if (hanldeGetPages && typeof hanldeGetPages === 'function') {
+          hanldeGetPages();
+        }
+      } else {
+        toast({
+          title: objResponse.data.message,
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "An error occurred",
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     (<SidebarGroup>
       <SidebarGroupLabel>Pages</SidebarGroupLabel>
@@ -36,7 +70,9 @@ export function NavMain({
                 <Ellipsis/>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem className="flex justify-between cursor-pointer" onClick={()=>{handledelete(item?.noteid, hanldeGetPages)}}>Delete <Trash2/></DropdownMenuItem>
+                <DropdownMenuItem className="flex justify-between cursor-pointer" onClick={() => handleDelete(item?.noteid)}>
+                  Delete <Trash2/>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
@@ -50,28 +86,4 @@ export function NavMain({
       </SidebarMenu>
     </SidebarGroup>)
   );
-}
-
-async function handledelete(noteid, hanldeGetPages) {
-  let arrReqParams = {
-    "action": "NOTES.DELETE",
-    "sanitize": {
-      "notes_id": noteid
-    }
-  }
-  const objResponse = await makeRequest("/api/application",arrReqParams);
-  if (objResponse.status===200 && objResponse.data.status) {
-    toast({
-      title: objResponse.data.message,
-      variant: "default"
-    });
-    if (hanldeGetPages && typeof hanldeGetPages === 'function') {
-      hanldeGetPages();
-    }
-  } else {
-    toast({
-      title: objResponse.data.message,
-      variant: "destructive"
-    });
-  }
 }

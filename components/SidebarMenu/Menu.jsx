@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect } from 'react'
 import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../ui/sidebar'
 import { ChartColumnStacked, File, Home, NotebookText } from 'lucide-react'
@@ -30,7 +32,7 @@ const Menu = () => {
     async function hanldeGetPages() {
         const objReq = {
             "action": "NOTES.LIST",
-            "sanitizer": {
+            "sanitize": {
                 "searchby": "ALL",
             }
         }
@@ -54,10 +56,9 @@ const Menu = () => {
         } else {
             toast({
                 title: objResponse.data.message,
-                type: "error"
-            })
+                variant: "destructive"
+            });
         }
-
     }
 
     async function CreateNewPage() {
@@ -68,19 +69,19 @@ const Menu = () => {
         if (objResponse.status === 200 && objResponse?.data?.status) {
             toast({
                 title: objResponse.data.message,
-                type: "success"
-            })
+                variant: "default"
+            });
             hanldeGetPages();
             Router.push("/app/pages/edit/" + btoa(JSON.stringify({ recid: objResponse.data.exportId })));
         } else {
             toast({
                 title: objResponse.data.message,
-                type: "error"
-            })
+                variant: "destructive"
+            });
         }
     }
 
-    const { data: pageMenuData, isLoading: pagemenuisloding } = useSWR(["getMenuPages"], () => hanldeGetPages(), { keepPreviousData: true, revalidateOnFocus: true });
+    const { data: pageMenuData, isLoading: pagemenuisloding, mutate } = useSWR(["getMenuPages"], () => hanldeGetPages(), { keepPreviousData: true, revalidateOnFocus: true });
 
     return (
         <>
@@ -101,7 +102,7 @@ const Menu = () => {
                     })
                 }
             </SidebarGroup>
-            <NavMain items={pageMenuData} CreateNewPage={CreateNewPage} />
+            <NavMain items={pageMenuData} CreateNewPage={CreateNewPage} hanldeGetPages={() => mutate()} />
         </>
     )
 }
