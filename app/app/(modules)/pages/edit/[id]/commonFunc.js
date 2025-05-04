@@ -55,14 +55,14 @@ export const updateNote = async (params) => {
     if (res.data.status) {
         toast({
             title: res.data.message,
-            type: "success"
-        })
+            variant: "default"
+        });
         notemutate();
     } else {
         toast({
             title: res.data.message,
-            type: "error"
-        })
+            variant: "destructive"
+        });
     }
     return null;
 }
@@ -89,14 +89,14 @@ export const protectNote = async (params) => {
     if (res.data.status) {
         toast({
             title: res.data.message,
-            type: "success"
-        })
+            variant: "default"
+        });
         notemutate();
     } else {
         toast({
             title: res.data.message,
-            type: "error"
-        })
+            variant: "destructive"
+        });
     }
     return null;
 }
@@ -123,14 +123,14 @@ export async function UpdateNoteVisibility(params) {
     if (res.data.status) {
         toast({
             title: res.data.message,
-            type: "success"
-        })
+            variant: "default"
+        });
         notemutate();
     } else {
         toast({
             title: res.data.message,
-            type: "error"
-        })
+            variant: "destructive"
+        });
     }
     return null;
 }

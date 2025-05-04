@@ -157,7 +157,7 @@ const page = ({ params }) => {
             note?.visibility ==="PB" && 
            <Button variant="outline" size="icon" onClick={()=>{
              navigator.clipboard.writeText(window.location.origin+"/app/view/"+ref);
-             toast({title:"Link Copied",type:"success"})
+             toast({title:"Link Copied",variant:"default"})
              }}>
             <CopyCheck />
            </Button>
