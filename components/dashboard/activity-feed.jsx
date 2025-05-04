@@ -17,6 +17,7 @@ const ACTIVITY_ICONS = {
   [ACTIVITY_TYPES.DOCUMENT_CREATED]: FileText
 };
 
+// Keeping mock data as fallback
 const MOCK_ACTIVITIES = [
   { 
     id: 1, 
@@ -76,14 +77,17 @@ export function ActivityItem({ activity, className }) {
   );
 }
 
-export function ActivityFeed({ activities = MOCK_ACTIVITIES, className }) {
+export function ActivityFeed({ activities, className }) {
+  // Use provided activities or fallback to mock data if empty
+  const displayActivities = activities && activities.length > 0 ? activities : MOCK_ACTIVITIES;
+  
   return (
     <div className={cn("space-y-1", className)}>
-      {activities.map((activity) => (
+      {displayActivities.map((activity) => (
         <ActivityItem key={activity.id} activity={activity} />
       ))}
       
-      {activities.length === 0 && (
+      {displayActivities.length === 0 && (
         <div className="py-8 text-center text-muted-foreground">
           No recent activity
         </div>
